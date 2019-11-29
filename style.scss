@@ -1,17 +1,8 @@
 ---
 ---
 
-//
-// IMPORTS
-//
-
 @import "reset";
 @import "variables";
-// Syntax highlighting @import is at the bottom of this file
-
-/**************/
-/* BASE RULES */
-/**************/
 
 html {
   font-size: 100%;
@@ -98,14 +89,8 @@ ul ul, ol ul {
   list-style-type: circle;
 }
 
-em, i {
+i, em {
   font-style: italic;
-}
-
-.details {
-  font-style: italic;
-  color: #333;
-  padding-top: -5px;
 }
 
 strong, b {
@@ -147,14 +132,6 @@ img {
 .clearfix:after {
     clear: both;
 }
-
-/*********************/
-/* LAYOUT / SECTIONS */
-/*********************/
-
-//
-// .masthead
-//
 
 .wrapper-masthead {
   margin-bottom: 50px;
@@ -243,10 +220,6 @@ nav {
   }
 }
 
-//
-// .main
-//
-
 .posts > .post {
   padding-bottom: 2em;
   border-bottom: 1px solid $lightGray;
@@ -279,16 +252,48 @@ nav {
 
 .wrapper-footer {
   margin-top: 50px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  background-color: $lightGray;
 }
 
-footer {
+.footer {
   padding: 20px 0;
-  text-align: center;
+  border-top: 1px solid $lightGray;
+
+  @include mobile {
+    text-align: center;
+  }
 }
 
-// Settled on moving the import of syntax highlighting to the bottom of the CSS
-// ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 @import "highlights";
+
+.row { display: flex; margin-bottom: 10px;}
+.column-left { flex: 30%; color: #777; }
+.column-right { flex: 70%; }
+
+span.entry-duration {
+  color: #777;
+  margin-right: 10px;
+}
+
+span.entry-location {
+  color: #777;
+  float: right;
+  font-variant: small-caps;
+  font-size: 80%;
+}
+
+div.entry-desc {
+  display: inline;
+}
+
+.separator {
+  border-bottom: 1px solid $lightGray;
+  height: 20px;
+}
+
+.link-icon {
+  display: flex;
+  align-items: center;
+  a:link, a:visited, a:hover, a:active {
+    color: #333;
+  }
+}
