@@ -1,0 +1,27 @@
+
+name: Léo Nicoletti
+description: Machine Learning enthusiast
+avatar: https://avatars1.githubusercontent.com/u/12911256?s=460&v=4
+
+disqus:
+google_analytics:
+url:
+baseurl: ""
+
+# jekyll config.
+permalink: /:title/
+version: v1.2.0
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+sass:
+  style: :expanded # or :compressed
+gems:
+  - jekyll-sitemap
+  - jekyll-feed
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - CNAME
