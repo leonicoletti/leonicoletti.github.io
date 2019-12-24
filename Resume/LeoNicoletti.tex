@@ -1,0 +1,91 @@
+\documentclass[11pt,a4paper]{moderncv}
+
+\moderncvtheme[blue]{classic}
+\renewcommand*{\addresssymbol}       {}
+\renewcommand*{\mobilephonesymbol}   {}
+\renewcommand*{\fixedphonesymbol}    {}
+\renewcommand*{\faxphonesymbol}      {}
+\renewcommand*{\emailsymbol}         {}
+\renewcommand*{\homepagesymbol}      {}
+\renewcommand*{\linkedinsocialsymbol}{}
+\renewcommand*{\githubsocialsymbol}  {}
+
+\usepackage[utf8]{inputenc}  %Windows
+
+%\usepackage[scale=0.975]{geometry}
+\usepackage[top=0.5cm, bottom=0.5cm, left=0.7cm, right=1cm]{geometry}
+\usepackage{graphicx}
+
+\firstname{\textsc{Léo}}
+\familyname{\textsc{Nicoletti}}
+\title{\textsc{Senior Machine Learning scientist,\protect\\research engineer}}
+\address{French citizen, born in 1993}{}
+\mobile{+33 7 69 32 30 29}
+\email{nicoletti.leo@gmail.com}
+\homepage{leonicoletti.github.io}
+
+\extrainfo{}
+%\photo[50pt]{nicoletl.png}
+\quote{I am a Research Engineer in Grenoble, working on Machine Learning and applied mathematics problems. I have a strong interest in all AI-related fields, especially Reinforcement Learning. I graduated from the Grenoble Institute of Technology (ENSIMAG) in 2016.}
+\makeatletter
+\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+\makeatother
+
+\usepackage{multibib}
+\newcites{book,misc}{{Books},{Others}}
+
+\nopagenumbers{}
+\begin{document}
+\maketitle
+
+%-----------------------------------------------------------
+%	WORK EXPERIENCE
+%-----------------------------------------------------------
+\section{\textsc{Work Experience}}
+
+\cventry{Sep '16 - Today}{Machine Learning expert}{Situ8ed}{Grenoble}{}{Automatically extract signal processing features to provide context-aware, high-level semantic informations. Decision making algorithms in the challenging environment of embedded systems. Deployment of an hyperparameters tuning layer on top of the decision layer (Gaussian processes, auto-ML).}
+
+\cventry{Feb-Sep '16}{Master thesis}{SAP SE}{Walldorf}{}{Learning to rank strategies of investment. Training algorithms with financial data on (non-vectorial) permutation sets to optimise investment strategies made of bonds \& equities. Portfolio optimisation and selection. SAP HANA Vora team.}
+
+\cventry{Feb-Jun '15}{Research Assistant}{INRIA}{Grenoble}{}{Graphical Bayesian models for high-dimension regression using Gaussian mixtures. Applied to the retrieval of physical properties from hyperspectral images (a Data Science challenge from Kaggle). Modelling spatial dependencies with Markov Random Fields. INRIA MISTIS team (hGLLiM software).}
+
+%-----------------------------------------------------------
+%	EDUCATION
+%-----------------------------------------------------------
+\section{\textsc{Education}}
+
+\cventry{2015-2016}{Research Master}{University Joseph Fourier \& ENSIMAG}{Grenoble}{}{Research-oriented Master 2. Applied statistics, Machine Learning and Data Science, Convex optimization, Stochastic calculus for finance. Grenoble INP, IM\textsuperscript{2}AG - MSIAM program (Master of Science in Industrial and Applied Mathematics).}
+
+\cventry{2013-2015}{Engineering school}{Grenoble Institute of Technology - ENSIMAG}{Grenoble}{}{Two years with a strong emphasis on software development (C/C++, Java, functional languages, MapReduce / Big Data...) and applied mathematics / statistics and their usual tools (Python, Matlab, R). Advanced algorithmics (complexity theory, AI projects).}
+
+\cventry{2011-2013}{Preparatory class}{Lycée Pierre de Fermat}{Toulouse}{}{Two-year intensive program preparing for the national competitive exam for engineering schools (Grandes Écoles). Major in mathematics, minor in physics and engineering. Algebra, analysis, geometry, topology, optics, electromagnetism, mechanics, chemistry... MPSI/MP}
+
+%-----------------------------------------------------------
+%	SKILLS
+%-----------------------------------------------------------
+\section{\textsc{SKILLS}}
+
+\cvline{Machine Learning}{
+Data Science, Deep Learning, Reinforcement Learning, Learning to Rank, Recommender systems, Energy-based models, Gradient Boosted Trees, auto-ML (Gaussian processes, hyperparameters tuning)}
+
+\cvline{Optimisation}{
+Metaheuristics, Combinatorial optimisation, Numerical methods, Stochastic processes, Monte Carlo method...}
+
+\cvline{High-level}{Java, Python, TensorFlow, numpy/pandas, Matlab, R, MapReduce paradigm}
+
+\cvline{Low-level}{C++11, On-board/low-resources C, multithreading}
+
+\cvline{Front-end}{Angular 2.x, Typescript, HTML/CSS, Native Android}
+
+\cvline{Back-end}{Node.js, Java/C++ servlets, DAOs, MySQL, protobuf/RPC, Cryptography, Network}
+
+\cvline{Environments}{Unix, git, CI, monitoring, Agile methodology, DevOps...}
+
+%-----------------------------------------------------------
+%	PERSONAL INTERESTS
+%-----------------------------------------------------------
+\section{\textsc{PERSONAL INTERESTS}}
+
+Sport is a sizeable part of my life, I practice mountaineering, rock-climbing, trail/running and a variety of martial arts. I also have a specific interest for history, cultures and languages. I speak fluent French and English and can read and understand spoken German, Swedish, Norwegian, Italian, Spanish, and Latin.
+
+\end{document}
