@@ -265,9 +265,27 @@ nav {
 
 @import "highlights";
 
-.row { display: flex; margin-bottom: 10px;}
-.column-left { flex: 30%; color: #777; }
-.column-right { flex: 70%; }
+.row {
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.column-left {
+   width: 180px;
+   float: left;
+   color: #777;
+}
+
+.column-right {
+   float: none;
+   width: auto;
+   overflow: hidden;
+}​​
+
+/* .row { display: flex; margin-bottom: 10px;}
+.column-left { flex: 20%; color: #777; }
+.column-right { flex: 80%; } */
 
 span.entry-duration {
   color: #777;
