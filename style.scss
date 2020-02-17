@@ -289,10 +289,16 @@ nav {
 
 span.entry-duration {
   color: #777;
-  margin-right: 10px;
 }
 
 span.entry-location {
+  color: #777;
+  font-variant: small-caps;
+  font-size: 80%;
+  margin-left: 20px;
+}
+
+span.entry-geolocation {
   color: #777;
   float: right;
   font-variant: small-caps;
