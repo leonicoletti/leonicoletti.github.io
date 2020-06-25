@@ -23,7 +23,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: $helveticaNeue;
-  color: $darkerGray;
+  color: #000;
   font-weight: bold;
 
   line-height: 1.7;
@@ -289,13 +289,13 @@ nav {
 
 span.entry-duration {
   color: #777;
+  padding-right: 10px;
 }
 
 span.entry-location {
   color: #777;
   font-variant: small-caps;
   font-size: 80%;
-  margin-left: 20px;
 }
 
 span.entry-geolocation {
