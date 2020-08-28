@@ -10,6 +10,9 @@
     <![endif]-->
 
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/timeline.css" />
+    <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/iconbar.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
 
   <body>
@@ -19,13 +22,21 @@
           <a href="{{ site.baseurl }}/" class="site-avatar"><img src="{{ site.avatar }}" /></a>
 
           <div class="site-info">
-            <h1 class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></h1>
+            <div class="site-name"><a href="{{ site.baseurl }}/">{{ site.name }}</a></div>
             <p class="site-description">{{ site.description }}</p>
+
+            <div class="icon-bar">
+              <a href="https://www.linkedin.com/in/leonicoletti" target="_blank" rel="noopener noreferrer">
+                <i class="fa fa-linkedin"></i>
+              </a>
+              <a href="mailto:nicoletti.leo@gmail.com" target="_blank" rel="noopener noreferrer">
+                <i class="fa fa-envelope"></i>
+              </a>
+            </div>
           </div>
 
           <nav>
-            <!-- <a href="{{ site.baseurl }}/blog">Blog</a> -->
-            <a href="{{ site.baseurl }}/pdf/LeoNicoletti.pdf" target="_blank">Resume</a>
+            <a href="{{ site.baseurl }}/pdf/LeoNicoletti.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
             <a href="{{ site.baseurl }}/curriculum">CV</a>
           </nav>
         </header>
