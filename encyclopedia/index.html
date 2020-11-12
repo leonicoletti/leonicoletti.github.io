@@ -1,0 +1,26 @@
+---
+layout: default
+---
+
+<link rel="stylesheet" href="{{ site.baseurl }}/encyclopedia/folder-tree.css">
+<link rel="stylesheet" href="{{ site.baseurl }}/encyclopedia/encyclopedia.css">
+<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css' integrity='sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7' crossorigin='anonymous'>
+
+<script src='https://code.jquery.com/jquery-2.2.4.min.js' integrity='sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44='   crossorigin='anonymous'></script>
+<script src='https://code.jquery.com/ui/1.11.3/jquery-ui.min.js' integrity='sha256-xI/qyl9vpwWFOXz7+x/9WkG5j/SVnSw21viy8fWwbeE=' crossorigin='anonymous'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS' crossorigin='anonymous'></script>
+<script src="{{ site.baseurl }}/encyclopedia/folder-tree.js"></script>
+
+<div id='tree_col'></div>
+<div id='pane_col'></div>
+
+<script>
+  $('#tree_col').folderTree({
+    root: 'Root Folder',
+    contents_url: 'https://raw.githubusercontent.com/leonicoletti/notes/master',
+    file_click: function(event, data) {
+      console.log('File path: ', data.path);
+      $('#pane_col').html("You've selected:<p>"+data.path+'</p>');
+    }
+  });
+</script>
