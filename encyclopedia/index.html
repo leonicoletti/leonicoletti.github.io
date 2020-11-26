@@ -16,11 +16,10 @@ layout: default
 
 <script>
   $('#tree_col').folderTree({
-    root: 'Root Folder',
+    root: 'Notes',
     contents_url: 'https://raw.githubusercontent.com/leonicoletti/notes/master',
     file_click: function(event, data) {
-      console.log('File path: ', data.path);
-      $('#pane_col').html("You've selected:<p>"+data.path+'</p>');
+      $('#pane_col').html("You've selected:<p>" + data.path + '</p>');
     }
   });
 </script>
