@@ -250,12 +250,12 @@ nav {
 }
 
 .wrapper-footer {
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .footer {
   padding: 20px 0;
-  border-top: 1px solid $lightGray;
+  // border-top: 1px solid $lightGray;
 
   @include mobile {
     text-align: center;
@@ -306,4 +306,27 @@ span.mooc-desc {
 .separator {
   border-bottom: 1px solid $lightGray;
   height: 20px;
+}
+
+.icon-bar {
+  width: 100%;
+  overflow: auto;
+
+  a {
+    float: left;
+    width: 20%;
+    text-align: center;
+    padding-right: 8px;
+    transition: all 0.3s ease;
+    color: #777;
+    font-size: 20px;
+
+    @include mobile {
+      float: none;
+    }
+
+    &:hover {
+      color: $blue;
+    }
+  }
 }
