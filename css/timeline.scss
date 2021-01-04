@@ -1,3 +1,8 @@
+---
+---
+
+@import "variables";
+
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -73,7 +78,7 @@
 }
 
 .timeline-content div.timeline-title {
-    color: #777;
+    color: $gray;
     font-variant: small-caps;
     font-size: 80%;
 }

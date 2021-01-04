@@ -273,7 +273,7 @@ nav {
 .column-left {
    width: 180px;
    float: left;
-   color: #777;
+   color: $gray;
 }
 
 .column-right {
@@ -283,12 +283,12 @@ nav {
 }​​
 
 span.entry-duration {
-  color: #777;
+  color: $gray;
   padding-right: 10px;
 }
 
 span.entry-location {
-  color: #777;
+  color: $gray;
   float: right;
   font-variant: small-caps;
   font-size: 80%;
@@ -299,7 +299,7 @@ div.entry-desc {
 }
 
 span.mooc-desc {
-  color: #777;
+  color: $gray;
   font-size: 80%;
 }
 
@@ -318,7 +318,7 @@ span.mooc-desc {
     text-align: center;
     padding-right: 8px;
     transition: all 0.3s ease;
-    color: #777;
+    color: $gray;
     font-size: 20px;
 
     @include mobile {
