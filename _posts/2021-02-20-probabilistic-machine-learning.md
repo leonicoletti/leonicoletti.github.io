@@ -38,21 +38,25 @@ $$\theta^* := \underset{\theta}{\operatorname{arg max}} p_\theta(x)$$
 
 ### Linear regression
 
-Linear regression is a simple model acting as a building block of deep learning models. We suppose that the $d$-dimensioned data are noisy observations of a linear combination of the latent variable $z$. With $w$ the weight vector to be fitted and a normal prior on the observation noise $\epsilon$, the model writes:
+Linear regression is a simple model acting as a building block of deep learning models. We assume that the data are noisy observations of a linear combination of the latent variables $z$. With $w$ the weight vector to be fitted and a normal prior on the observation noise $\epsilon$, the model writes:
 
 $$
 \left\{
 \begin{align}
 x & = z w + \epsilon \\
-\epsilon & \sim \mathcal{N}(0, \sigma^2 I_d)
+\epsilon & \sim \mathcal{N}(0, \sigma^2)
 \end{align}
 \right.
 $$
 
-Using the conditionnal probability notation, we have $x \mid z, w \sim \mathcal{N}(z w, \sigma^2 I_d)$. Therefore, the *maximum likelihood estimator* (MLE) on the parameters $\theta = \{w\}$ boils down to the usual *mean squared error* minimization rule (MSE):
+Using the conditionnal probability notation, we have $x \mid z, w \sim \mathcal{N}(z w, \sigma^2)$. Therefore, the *maximum likelihood estimator* (MLE) on the parameters $\theta = \{w\}$ boils down to the usual *mean squared error* minimization rule (MSE):
 
 $$
-\theta^* := \underset{\theta}{\operatorname{arg max}} p_\theta(x \mid z, w) = \underset{w}{\operatorname{arg max}} \exp(- \lVert x - zw \rVert^2 / \sigma^2) = \underset{w}{\operatorname{arg min}} \lVert x - zw \rVert^2
+\begin{align}
+\theta^* & := \underset{\theta}{\operatorname{arg max}} p_\theta(x \mid z, w) \\
+& = \underset{w}{\operatorname{arg max}} \exp(- \lVert x - zw \rVert^2 / \sigma^2) \\
+& = \underset{w}{\operatorname{arg min}} \lVert x - zw \rVert^2
+\end{align}
 $$
 
 ### Ridge regression
@@ -63,8 +67,8 @@ $$
 \left\{
 \begin{align}
 x & = z w + \epsilon \\
-\epsilon & \sim \mathcal{N}(0, \sigma^2 I_d) \\
-w &\sim \mathcal{N}(0, \tau^2 I_d)
+\epsilon & \sim \mathcal{N}(0, \sigma^2) \\
+w &\sim \mathcal{N}(0, \tau^2)
 \end{align}
 \right.
 $$
@@ -87,15 +91,20 @@ We train both simultaneously to reconstruct the observed variables through the l
 
 $$\phi^*, \psi^* := \underset{\phi,\psi}{\operatorname{arg min}} \lVert x - (\psi \circ \phi) \, x \rVert^2 $$
 
-## Stochastic variational inference
+## Variational inference
 
 We consider the generic case of a *graphical model* $p_\theta$ with a hierarchy of latent variables $z$ and conditioning relations between them. The two problems of interest are:
 * *model fitting*: selecting the best set of parameters $\theta^*$ with respect to the MLE criterion;
 * *posterior estimation*: approximating the posterior distributions $p_{\theta^*}(z \mid x)$ for each $z$ given observed data $x$.
 
-We apply the MLE criterion on the *log-evidence*
+Applying the MLE criterion on the *log-evidence*, we get
 
-$$\theta^* := \underset{\theta}{\operatorname{arg max}} \log p_\theta(x) = \underset{\theta}{\operatorname{arg max}} \log \int_z p_\theta(x,z) \, dz$$
+$$
+\begin{align}
+\theta^* & := \underset{\theta}{\operatorname{arg max}} \log p_\theta(x) \\
+& = \underset{\theta}{\operatorname{arg max}} \log \int_z p_\theta(x,z) \, dz
+\end{align}
+$$
 
 The integral over the causes $z$ is often intractable and the associated optimization non-convex, making the whole problem especially difficult to tackle. Furthermore, once $\theta^*$ is estimated, computing the prior also requires to approximate an intractable integral:
 
@@ -109,14 +118,21 @@ We use the *Kullback–Leibler divergence* $D_{KL}(q_\psi \mid\mid p_{\theta}(\c
 
 $$D_{KL} := \mathbb{E}_{q_\psi} \left[\log \frac{q_\psi(z)}{p_{\theta}(z \mid x)}\right]$$
 
-However, optimizing it with respect to $\psi$ is much harder, since the expectation distribution depends on $\psi$. The trick is that it can be expressed as $\log p_\theta(x) - ELBO$, where ELBO is an *evidence lower bound*. Therefore, maximizing the ELBO amounts to minimizing the divergence between the posterior and its guide.
+However, optimizing it with respect to $\psi$ is much harder, since the expectation distribution depends on $\psi$. The trick is that it can be expressed as $\log p_\theta(x) - ELBO$, where the left term is the (constant) log-evidence and ELBO is an evidence lower bound. Therefore, maximizing the ELBO amounts to minimizing the divergence between the posterior and its guide.
 
 $$ELBO := \mathbb{E}_{q_\psi} \left[\log \frac{p_{\theta}(x, z)}{q_\psi(z)}\right]$$
 
-ELBO is much easier to compute as it doesn't require to approximate the posterior $p_\theta(z \mid x)$ but only the probability $p_\theta(x,z)$.
+The ELBO is much easier to deal with as it bears no dependency to the posterior $p_\theta(z \mid x)$ but only to $p_\theta(x,z)$, that we can compute.
+
+### Stochastic variational inference
+
+By surrogating latent posteriors with deep neural networks (guides), we can combine the representation strength of modern *Deep Learning* techniques with probabilistic inference. In order to make the associated optimization problems tractable, Hoffman *et al.* proposed a framework to apply stochastic gradient ascents: *Stochastic Variational Inference* (SVI). The python-based [Pyro](https://pyro.ai/) library provides a state-of-the-art implementation of these algorithms. It can handle any kind of distribution $p$ provided that:
+* we can sample from each $p_\theta$;
+* we can compute the pointwise log pdf $p_\theta$;
+* $p_\theta$ is differentiable with respect to $\theta$.
 
 ## References
 
 * Ulrike von Luxburg, *Statistical Machine Learning (Part 12 - Risk minimization vs. probabilistic approaches)*, Summer Term 2020, University of Tübingen.
 * Pyro.ai, *Getting Started With Pyro: Tutorials, How-to Guides and Examples*.
-
+* Matt Hoffman, David M. Blei, Chong Wang, John Paisley, *Stochastic Variational Inference*, Journal of Machine Learning Research, 2013.
