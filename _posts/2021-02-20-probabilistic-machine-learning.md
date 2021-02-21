@@ -5,19 +5,19 @@ published: true
 
 tags: [machine-learning, stochastic-variational-inference, bayesian, statistical-learning, pyro]
 
-title: The statistical foundations of machine learning
+title: Generative machine learning from a probabilistic perspective
 description: How probabilistic inference underpins empirical machine learning, and how many rules of thumb relate to structured probabilistic models using the Bayesian framework.
 ---
 
 ## Introduction
 
-This article concerns my take on how the tools of probability can help us give a quantified meaning to the philosophical notion of *causality*. Modern probabilistic frameworks provide useful tools to uncover and quantify the different causes lying behind observations. We propose a short introduction to the field of *probabilistic inference* and how it underpins empirical results in different fields of pratical machine learning.
+This article is my take on how the tools of probability can help us give a quantified meaning to the philosophical notion of *causality*. Modern probabilistic programming offers useful tools to uncover and quantify the different causes lying behind observations. We propose a short introduction to the field of *probabilistic inference* and how it underpins empirical results in different fields of pratical machine learning.
 
 ## Formalism
 
-We consider that our data are realizations of a random variable $x$, which is explained, at least partially, by a set of latent variables $z$. These latent variables act as *causes* for our observations but since they cannot be observed, they must be *infered* from the data. This problem of probabilitic inference requires to encode our knowledge in a model $p$, which reflects the structure of causality.
+We consider that our data are realizations of a random variable $x$, which is explained, at least partially, by a set of latent variables $z$. These latent variables act as *causes* for our observations but since, most of the time they cannot be observed, they must be *infered* from the data. This problem of probabilitic inference requires to encode our knowledge in a model $p$, which reflects the structure of causality.
 
-For example, suppose we want to measure weight $w$ of an object but are only provided with a unreliable scale, which gives slightly different results for each measure. We are facing two different kinds of uncertainty: the one associated with the unknown weight and the one associated with the scale itself. Provided a first *guess* $g$, we can define the following probabilistic model.
+For example, suppose we want to measure weight $w$ of an object but are only provided with an unreliable scale, which gives slightly different results for each measure. We are facing two different kinds of uncertainty: the one associated with the unknown weight and the one associated with the scale itself. Provided a first *guess* $g$, we can define the following probabilistic model.
 
 $$
 \left\{
@@ -28,11 +28,11 @@ m & \mid g, w \sim \mathcal{N}(w, \tau)
 \right.
 $$
 
-The measurements $m$ are the only observed random variables, which are determined by the underlying weight, considered a latent cause, with its own uncertainty. Both uncertainties are modeled with Gaussian laws with standard deviations $\sigma$ and $\tau$. The *parameters* $\theta$ of the model correspond to constant scalars or vectors, here $\theta = \{g, \sigma, \tau\}$. Fitting the model means finding the optimal set $\theta^*$ with respect to a given criterion, which is analogous to learning a model with respect to a given loss function in machine learning.
+The measurements $m$ are the only observed random variables, which are determined by the underlying weight, considered a latent cause, with its own uncertainty. Both uncertainties are modeled by Gaussian laws with standard deviations $\sigma$ and $\tau$ respectively. The *parameters* $\theta$ of the model correspond to constant scalars or vectors, here $\theta = \\{g, \sigma, \tau\\}$. Fitting the model means finding the optimal set $\theta^*$ according to a criterion, which is analogous to learning a model with respect to a given loss function in conventional machine learning.
 
 ## Maximum likelihood criterion
 
-We call *evidence* the probability of the data $x$ with respect to the model, denoted $p_\theta(x)$. The usual optimization criterion is to find the parameters $\theta$ such as the evidence of the data is maximal, therefore
+We call *evidence* the probability of the data $x$ with respect to the model, simply denoted $p_\theta(x)$. The usual optimization criterion is to find the parameters $\theta$ such as the evidence of the data is maximal, therefore
 
 $$\theta^* := \underset{\theta}{\operatorname{arg max}} p_\theta(x)$$
 
@@ -49,19 +49,19 @@ x & = z w + \epsilon \\
 \right.
 $$
 
-Using the conditionnal probability notation, we have $x \mid z, w \sim \mathcal{N}(z w, \sigma^2)$. Therefore, the *maximum likelihood estimator* (MLE) on the parameters $\theta = \{w\}$ boils down to the usual *mean squared error* minimization rule (MSE):
+Using the conditional probability notation, we have $x \mid z, w \sim \mathcal{N}(z w, \sigma^2)$. Therefore, the *maximum likelihood estimator* (MLE) on the parameters $\theta = \\{w\\}$ boils down to the usual *mean squared error* minimization rule (MSE). This is a direct consequence of the normality assumption.
 
 $$
 \begin{align}
 \theta^* & := \underset{\theta}{\operatorname{arg max}} p_\theta(x \mid z, w) \\
-& = \underset{w}{\operatorname{arg max}} \exp(- \lVert x - zw \rVert^2 / \sigma^2) \\
+& = \underset{w}{\operatorname{arg max}} \exp \left(- \lVert x - zw \rVert^2 / \sigma^2 \right) \\
 & = \underset{w}{\operatorname{arg min}} \lVert x - zw \rVert^2
 \end{align}
 $$
 
 ### Ridge regression
 
-To avoid overfitting the data, we usually add a regularizer on the parameter $w$, *e.g.* a Tikhonov regularizer $\lambda \lVert w \rVert^2$ to elastically control the weight dispersion. This is explained as a maximum likelihood rule by further adding a normal prior on $w$.
+To avoid overfitting the data, we usually add a regularizer on the parameter $w$, *e.g.* a Tikhonov regularizer $\lambda \lVert w \rVert^2$ to elastically control the weight dispersion. This is also explained by the MLE rule by further adding a normal prior on $w$.
 
 $$
 \left\{
@@ -77,19 +77,19 @@ By applying Bayes' rule on the *posterior* $w \mid x,z$, we get $p(w \mid x,z) =
 
 $$w^* := \underset{w}{\operatorname{arg min}} \lVert x - zw \rVert^2 + \lambda \lVert w \rVert^2$$
 
-Where $\lambda := \sigma^2 \, / \, \tau^2$. This MLE criterion enriched with a prior on the weight parameter is often refered as the *maximum a posteriori* rule (MAP) and underscores how regularization relates to structured uncertainty.
+Where $\lambda := \sigma^2 \, / \, \tau^2$. The MLE criterion enriched with a prior on the weight parameter is often refered as the *maximum a posteriori* rule (MAP) and underscores how regularization relates to structured uncertainty.
 
 ### Unsupervised learning of the latent space
 
-We now have a practical criterion to solve for the best $\theta$ given the uncertainty structure we associate with the problem. This rule concerns a *supervised* context, where we are provided with both $x$ and $z$ for training. A more general - and realistic - setup concerns the case where we only have $x$ observations to infer the causes. It corresponds to *inductive reasoning*, where we try to infer the probables causes of given premises.
+We now have a practical criterion to solve for the best $\theta$ given the uncertainty structure we associate with the problem. This rule concerns a *supervised* context, where we are provided with both $x$ and $z$ for training. A more general - and realistic - setup concerns the case where we only have $x$ observations to infer the causes. It corresponds to *inductive reasoning*, where we try to infer the probables causes of observables effects.
 
-The maching learning toolkit for this *unsupervised* learning includes *autoencoders*, a kind of network consisting of two symmetrical parts:
-* the *encoder* (parameterized by $\phi$): learns the mapping from observations $x$ to latent variables $z$;
-* the *decoder* (parameterized by $\psi$): learns the inverse mapping, from the latent variables $z$ back to the observations $x$.
+The maching learning toolkit for this *unsupervised* learning includes *autoencoders*, a kind of network consisting of two symmetrical sub-networks:
+* the *encoder* (parameterized by $\psi$): learns the mapping from observations $x$ to latent variables $z$;
+* the *decoder* (parameterized by $\phi$): learns the inverse mapping, from the latent variables $z$ back to the observations $x$.
 
 We train both simultaneously to reconstruct the observed variables through the latent space
 
-$$\phi^*, \psi^* := \underset{\phi,\psi}{\operatorname{arg min}} \lVert x - (\psi \circ \phi) \, x \rVert^2 $$
+$$\psi^*, \phi^* := \underset{\psi,\phi}{\operatorname{arg min}} \lVert x - (\phi \circ \psi) \, x \rVert^2 $$
 
 ## Variational inference
 
@@ -106,19 +106,19 @@ $$
 \end{align}
 $$
 
-The integral over the causes $z$ is often intractable and the associated optimization non-convex, making the whole problem especially difficult to tackle. Furthermore, once $\theta^*$ is estimated, computing the prior also requires to approximate an intractable integral:
+The integral over the causes $z$ is often intractable and the associated optimization non-convex, making the whole problem especially strenuous to tackle. Furthermore, once $\theta^*$ is estimated, computing the prior also requires to approximate an intractable integral:
 
 $$p_{\theta^*}(z \mid x) = \frac{p_{\theta^*}(x,y)}{\int p_{\theta^*}(x,z) \, dz}$$
 
 ### Variational distribution
 
-The idea behind *variational inference* is to solve these two problems by surrogating the posteriors $p_{\theta}(z \mid x)$ by parameterized distributions $q_\psi(z)$ easier to compute. These distributions are called *variational distributions* or *guides* by the authors of the [Pyro](https://pyro.ai/) framework. The approximation criterion is a measure of similarity between distributions $p_{\theta}(\cdot \mid x)$ and $q_\psi$, both living in infinite-dimensional function spaces, hence the name "variational".
+The idea behind *variational inference* is to solve these two problems by surrogating the posteriors $p_{\theta}(z \mid x)$ by parameterized distributions $q_\psi(z)$ that are easier to compute. They are called *variational distributions* or *guides* by the authors of the [Pyro](https://pyro.ai/) framework. The approximation criterion is a measure of similarity between distributions $p_{\theta}(\cdot \mid x)$ and $q_\psi$, both living in infinite-dimensional function spaces, hence the name "variational".
 
 We use the *Kullback–Leibler divergence* $D_{KL}(q_\psi \mid\mid p_{\theta}(\cdot \mid x))$ which quantifies the similarity between the true posteriors and their surrogating guides. The KL divergence can be approximated by Monte-Carlo methods since it is defined as the expectation:
 
 $$D_{KL} := \mathbb{E}_{q_\psi} \left[\log \frac{q_\psi(z)}{p_{\theta}(z \mid x)}\right]$$
 
-However, optimizing it with respect to $\psi$ is much harder, since the expectation distribution depends on $\psi$. The trick is that it can be expressed as $\log p_\theta(x) - ELBO$, where the left term is the (constant) log-evidence and ELBO is an evidence lower bound. Therefore, maximizing the ELBO amounts to minimizing the divergence between the posterior and its guide.
+However, optimizing it with respect to $\psi$ is much harder, since the expectation distribution depends on $\psi$. The trick is that it can be expressed as $\log p_\theta(x) - ELBO$, where the left term is the (constant) log-evidence and ELBO is an evidence lower bound. Consequently, maximizing the ELBO amounts to minimizing the divergence between the posterior and its guide.
 
 $$ELBO := \mathbb{E}_{q_\psi} \left[\log \frac{p_{\theta}(x, z)}{q_\psi(z)}\right]$$
 
@@ -131,8 +131,18 @@ By surrogating latent posteriors with deep neural networks (guides), we can comb
 * we can compute the pointwise log pdf $p_\theta$;
 * $p_\theta$ is differentiable with respect to $\theta$.
 
+### Variational autoencoders
+
+We consider the unsupervised case, where we aim at uncovering causes from observations. We surrogate the posterior probability of latent variables $p_\theta(z \mid x)$ by a deep neural network $q_\psi$. The network acts as an encoder which takes $x$ as input and outputs $\psi$, which parameterizes the guide. This design allows to learn guides from a dataset of observations, the supervision is provided by
+* the reconstruction error on the $x$'s (the usual autoencoder loss);
+* the KL divergence between the learnt guides and the true posteriors.
+
+We usually target the class of normal distributions by outputting the mean and log-standard deviation of a multivariate Gaussian law, *i.e.* $\psi = \\{\mu, \log \sigma\\}$. Once the encoder is trained together with its corresponding decoder, the associated guide $q_\psi$ fits the true posterior distributions of the latent variables as well as possible (in the KL sense). The encoder and its symmetrical decoder constitute what is called a *variational autoencoder* (VAE).
+
+Note that this network is a *generative model* as it tries to uncover the true structure of causality underpinning the data and not only tries to reproduces it. By sampling a datum $\widehat{z}$ from $q_\psi$ and subsequently decoding it, we can generate a plausible observation $\widehat{x}$.
+
 ## References
 
-* Ulrike von Luxburg, *Statistical Machine Learning (Part 12 - Risk minimization vs. probabilistic approaches)*, Summer Term 2020, University of Tübingen.
-* Pyro.ai, *Getting Started With Pyro: Tutorials, How-to Guides and Examples*.
-* Matt Hoffman, David M. Blei, Chong Wang, John Paisley, *Stochastic Variational Inference*, Journal of Machine Learning Research, 2013.
+* Ulrike von Luxburg, *Statistical Machine Learning (Part 12 - Risk minimization vs. probabilistic approaches)*, Summer Term 2020, University of Tübingen. [↪](https://www.youtube.com/watch?v=eIi7GOmR_6I)
+* Pyro.ai, *Getting Started With Pyro: Tutorials, How-to Guides and Examples*. [↪](https://pyro.ai/examples/svi_part_i.html)
+* Matt Hoffman, David M. Blei, Chong Wang, John Paisley, *Stochastic Variational Inference*, Journal of Machine Learning Research, 2013. [↪](https://arxiv.org/abs/1206.7051)
