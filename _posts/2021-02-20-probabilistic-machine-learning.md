@@ -81,15 +81,15 @@ Where $\lambda := \sigma^2 \, / \, \tau^2$. The MLE criterion enriched with a pr
 
 ### Unsupervised learning of the latent space
 
-We now have a practical criterion to solve for the best $\theta$ given the uncertainty structure we associate with the problem. This rule concerns a *supervised* context, where we are provided with both $x$ and $z$ for training. A more general - and realistic - setup concerns the case where we only have $x$ observations to infer the causes. It corresponds to *inductive reasoning*, where we try to infer the probables causes of observables effects.
+We now have a practical criterion to solve for the best $\theta$ given the uncertainty structure we associate with the problem. This rule concerns a *supervised* context, where we are provided with both $x$ and $z$ for training. In a more realistic setup, we only have $x$ observations to infer for the causes. It corresponds to *inductive reasoning*, where we try to infer the probables causes of observables effects.
 
 The maching learning toolkit for this *unsupervised* learning includes *autoencoders*, a kind of network consisting of two symmetrical sub-networks:
-* the *encoder* (parameterized by $\psi$): learns the mapping from observations $x$ to latent variables $z$;
-* the *decoder* (parameterized by $\phi$): learns the inverse mapping, from the latent variables $z$ back to the observations $x$.
+* the *encoder* $p_\theta(x)$: learns the mapping from observations $x$ to latent variables $z$;
+* the *decoder* $q_\phi(z)$: learns the inverse mapping, from the latent variables $z$ back to the observations $x$.
 
 We train both simultaneously to reconstruct the observed variables through the latent space
 
-$$\psi^*, \phi^* := \underset{\psi,\phi}{\operatorname{arg min}} \lVert x - (\phi \circ \psi) \, x \rVert^2 $$
+$$\theta^*, \phi^* := \underset{\theta,\phi}{\operatorname{arg min}} \lVert x - (q_\phi \circ p_\theta) \, x \rVert^2 $$
 
 ## Variational inference
 
@@ -112,15 +112,15 @@ $$p_{\theta^*}(z \mid x) = \frac{p_{\theta^*}(x,y)}{\int p_{\theta^*}(x,z) \, dz
 
 ### Variational distribution
 
-The idea behind *variational inference* is to solve these two problems by surrogating the posteriors $p_{\theta}(z \mid x)$ by parameterized distributions $q_\psi(z)$ that are easier to compute. They are called *variational distributions* or *guides* by the authors of the [Pyro](https://pyro.ai/) framework. The approximation criterion is a measure of similarity between distributions $p_{\theta}(\cdot \mid x)$ and $q_\psi$, both living in infinite-dimensional function spaces, hence the name "variational".
+The idea behind *variational inference* is to solve these two problems by surrogating the posteriors $p_{\theta}(z \mid x)$ by parameterized distributions $q_\phi(z)$ that are easier to compute. They are called *variational distributions* or *guides* by the authors of the [Pyro](https://pyro.ai/) framework. The approximation criterion is a measure of similarity between distributions $p_{\theta}(\cdot \mid x)$ and $q_\phi$, both living in infinite-dimensional function spaces, hence the name "variational".
 
-We use the *Kullback–Leibler divergence* $D_{KL}(q_\psi \mid\mid p_{\theta}(\cdot \mid x))$ which quantifies the similarity between the true posteriors and their surrogating guides. The KL divergence can be approximated by Monte-Carlo methods since it is defined as the expectation:
+We use the *Kullback–Leibler divergence* $D_{KL}(q_\phi \mid\mid p_{\theta}(\cdot \mid x))$ which quantifies the similarity between the true posteriors and their surrogating guides. The KL divergence can be approximated by Monte-Carlo methods since it is defined as the expectation:
 
-$$D_{KL} := \mathbb{E}_{q_\psi} \left[\log \frac{q_\psi(z)}{p_{\theta}(z \mid x)}\right]$$
+$$D_{KL} := \mathbb{E}_{q_\phi} \left[\log \frac{q_\phi(z)}{p_{\theta}(z \mid x)}\right]$$
 
-However, optimizing it with respect to $\psi$ is much harder, since the expectation distribution depends on $\psi$. The trick is that it can be expressed as $\log p_\theta(x) - ELBO$, where the left term is the (constant) log-evidence and ELBO is an evidence lower bound. Consequently, maximizing the ELBO amounts to minimizing the divergence between the posterior and its guide.
+However, optimizing it with respect to $\phi$ is much harder, since the expectation distribution depends on $\phi$. The trick is that it can be expressed as $\log p_\theta(x) - ELBO$, where the left term is the (constant) log-evidence and ELBO is an evidence lower bound. Consequently, maximizing the ELBO amounts to minimizing the divergence between the posterior and its guide.
 
-$$ELBO := \mathbb{E}_{q_\psi} \left[\log \frac{p_{\theta}(x, z)}{q_\psi(z)}\right]$$
+$$ELBO := \mathbb{E}_{q_\phi} \left[\log \frac{p_{\theta}(x, z)}{q_\phi(z)}\right]$$
 
 The ELBO is much easier to deal with as it bears no dependency to the posterior $p_\theta(z \mid x)$ but only to $p_\theta(x,z)$, that we can compute.
 
@@ -133,16 +133,23 @@ By surrogating latent posteriors with deep neural networks (guides), we can comb
 
 ### Variational autoencoders
 
-We consider the unsupervised case, where we aim at uncovering causes from observations. We surrogate the posterior probability of latent variables $p_\theta(z \mid x)$ by a deep neural network $q_\psi$. The network acts as an encoder which takes $x$ as input and outputs $\psi$, which parameterizes the guide. This design allows to learn guides from a dataset of observations, the supervision is provided by
-* the reconstruction error on the $x$'s (the usual autoencoder loss);
-* the KL divergence between the learnt guides and the true posteriors.
+Using the graphical model notation, the Pyro tutorial defines a *variational autoencoder* (VAE) as the simple class of models with observations $x$ depending on the latents $z$ and the parameter $\theta$. Only the parameter is *global*, meaning that it is common to all $N$ data. The rectangles are *plates*, their contents are repeated for each datum and considered independent conditionally on the upstream nodes ($\theta$ and $\phi$ here).
 
-We usually target the class of normal distributions by outputting the mean and log-standard deviation of a multivariate Gaussian law, *i.e.* $\psi = \\{\mu, \log \sigma\\}$. Once the encoder is trained together with its corresponding decoder, the associated guide $q_\psi$ fits the true posterior distributions of the latent variables as well as possible (in the KL sense). The encoder and its symmetrical decoder constitute what is called a *variational autoencoder* (VAE).
+<p style="text-align: center; margin: 20px"><img src="/assets/blog/vae_graph_model.png" width="400"/><br>
+<em>Graphical notations of a VAE encoder (on the left) and decoder (on the right).</em></p>
 
-Note that this network is a *generative model* as it tries to uncover the true structure of causality underpinning the data and not only tries to reproduces it. By sampling a datum $\widehat{z}$ from $q_\psi$ and subsequently decoding it, we can generate a plausible observation $\widehat{x}$.
+The relation between the $x$'s and their $z$'s is parameterized by a neural network, acting as an *encoder*. It can be highly nonlinear and domain-specific (*e.g.* using sliding windows convolutions for images). The model $p_\theta(x)$ corresponds to the encoder and the posterior $p_\theta(z \mid x)$ corresponds to the associated decoder.
+
+As above, to make the problem tractable, we surrogate the posterior probability with a deep neural network $q_\phi$. The parameter $\phi$ defines a class of distributions, in which the optimum $\phi^*$ in the KL sense is selected by training the autoencoder. This design allows to learn the guide from a dataset of observations, the supervision being provided by
+* the reconstruction error on the $x$'s (MLE criterion);
+* the KL divergence between the guide and the posterior (ELBO criterion).
+
+We usually target the class of normal distributions by outputting the mean and log-standard deviation of a multivariate Gaussian law, *i.e.* $\phi = \\{\mu, \log \sigma\\}$. Once the encoder is trained together with its corresponding decoder, the associated guide $q_\phi$ fits the true posterior distributions of the latent variables as well as possible.
+
+Note that the forward pass samples $\widehat{z}$ from $\phi$ and decodes it into a plausible observation $\widehat{x}$ with the decoder $q_\phi$. We call it a *generative model* as it tries to discover the true structure of causality explaining the data and not only tries to mimick it.
 
 ## References
 
 * Ulrike von Luxburg, *Statistical Machine Learning (Part 12 - Risk minimization vs. probabilistic approaches)*, Summer Term 2020, University of Tübingen. [↪](https://www.youtube.com/watch?v=eIi7GOmR_6I)
-* Pyro.ai, *Getting Started With Pyro: Tutorials, How-to Guides and Examples*. [↪](https://pyro.ai/examples/svi_part_i.html)
+* Pyro.ai tutorials, *Variational Autoencoders*. [↪](https://pyro.ai/examples/vae.html)
 * Matt Hoffman, David M. Blei, Chong Wang, John Paisley, *Stochastic Variational Inference*, Journal of Machine Learning Research, 2013. [↪](https://arxiv.org/abs/1206.7051)
