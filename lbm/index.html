@@ -5,20 +5,10 @@ layout: default
 <link rel="stylesheet" href="{{ site.baseurl }}/lbm/style.css">
 
 <script src="{{ site.baseurl }}/lbm/pixi.min.js"></script>
-<script src="{{ site.baseurl }}/lbm/gas-sim.js"></script>
+<script src="{{ site.baseurl }}/lbm/gas-simulator.js"></script>
 
 <div class="vertical-box">
   <div class="row header"><h1>Lattice Boltzmann gas simulation</h1></div>
-  <div class="row header" id="desktopcontrols">
-      <div class="horizontal-box" style="padding-bottom: 5px">
-          <div style="padding-right: 25px">
-              <span class="control-text">L-click:</span> push fluid
-          </div>
-          <div>
-              <span class="control-text">R-click:</span> add/remove obstacles
-          </div>
-      </div>
-  </div>
 
   <div class="row header">
       <div class="horizontal-box">
@@ -59,6 +49,8 @@ layout: default
               <span><label for="visc-range" id="visc-label">Viscosity: 0.020</label></span>
               <span><input type="range" min="0.005" max="0.15" step="0.005" value="0.02" class="slider" id="visc-range"></span>
           </div>
+      </div>
+      <div class="horizontal-box">
           <div class="slider-box">
               <span><label for="size-range" id="size-label">Grid: 64x64</label></span>
               <span><input type="range" min="64" max="172" step="1" value="64" class="slider" id="size-range"></span>
@@ -70,7 +62,7 @@ layout: default
       <div class="render-wrapper" id="render-wrapper">
           <div class="renderer" id="renderer"></div>
       </div>
-      <div><span id="times">Waiting...</span></div>
+      <div><span id="stats">Waiting...</span></div>
   </div>
 </div>
 

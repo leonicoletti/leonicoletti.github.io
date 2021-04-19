@@ -124,10 +124,6 @@
     cursor: pointer;
 }
 
-.control-text {
-    color: #4183C4;
-}
-
 .render-wrapper {
     flex-grow: 1;
     flex-shrink: 1;
@@ -143,6 +139,6 @@
 }
 
 .renderer {
-    width: fit-content;
-    height: fit-content;
+    width: 400px;
+    height: 400px;
 }
