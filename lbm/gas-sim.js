@@ -1,8 +1,44 @@
-// gasSim.js
 
-// Lots of credit to this code can be given to Dan Schroeder (http://physics.weber.edu/schroeder/fluids/)
+// Math utils.
 
-function GasSim(width, height, viscosity, density = 1) {
+function dot(a, b) {
+    return a[0] * b[0] + a[1] * b[1];
+}
+
+function sum(arr) {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++)
+        sum += arr[i];
+    return sum;
+}
+
+function avg(arr) {
+    return sum(arr) / arr.length;
+}
+
+function scale(vec, scale) {
+    return [vec[0] * scale, vec[1] * scale];
+}
+
+function norm(vec) {
+    let len = Math.sqrt(dot(vec, vec));
+    if (len === 0) return vec;
+    return [vec[0] / len, vec[1] / len];
+}
+
+function clamp(value, low, high) {
+    if (value < low) return low;
+    if (value > high) return high;
+    return value;
+}
+
+function rgb2hex(rgb) {
+    return PIXI.utils.rgb2hex([clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1)]);
+}
+
+// LBM D2Q9 LBM.
+
+function GasSim(width, height, viscosity, density=1) {
 
     this.width = width;
     this.height = height;
@@ -11,12 +47,11 @@ function GasSim(width, height, viscosity, density = 1) {
     const rho = new Float32Array(width * height).fill(0);
     const ux = new Float32Array(width * height).fill(0);
     const uy = new Float32Array(width * height).fill(0);
-    const obst = new Int8Array(width * height).fill(0);
+    const obst = new Int8Array(width * height).fill(0); // Boundary mask.
 
-    // Give public access to distribution functions
     this.df = df;
 
-    // Fill border with obstacles
+    // Hard borders.
     for (let x = 0; x < width; x++) {
         obst[x] = 1;
         obst[x + (height - 1) * width] = 1;
@@ -30,7 +65,7 @@ function GasSim(width, height, viscosity, density = 1) {
     const one9th = 1.0 / 9.0;
     const one36th = 1.0 / 36.0;
 
-    const collide = function () {
+    const collide = function() {
         let omega = 1.0 / (3.0 * viscosity + 0.5);
         for (let y = 1; y < height - 1; y++) {
             let yw = y * width;
@@ -68,7 +103,7 @@ function GasSim(width, height, viscosity, density = 1) {
         }
     };
 
-    const stream = function () {
+    const stream = function() {
         let width9 = width * 9;
         for (let y = height - 1; y > 0; y--) {
             let yw = y * width;
@@ -104,7 +139,7 @@ function GasSim(width, height, viscosity, density = 1) {
         }
     };
 
-    const bounce = function () {
+    const bounce = function() {
         let width9 = width * 9;
         for (let y = 1; y < height - 1; y++) {
             let yw = y * width;
@@ -164,7 +199,8 @@ function GasSim(width, height, viscosity, density = 1) {
                 df[i9 - 9 - width9 + 6] = df[i9 + 2];
             }
         }
-        // corners
+
+        // Corners.
         let x = 0;
         let yw = 0;
         if (obst[x + yw] !== 0) {
@@ -199,7 +235,7 @@ function GasSim(width, height, viscosity, density = 1) {
         }
     };
 
-    this.simulate = function (steps = 1) {
+    this.simulate = function(steps=1) {
         for (let step = 0; step < steps; step++) {
             collide();
             stream();
@@ -207,37 +243,36 @@ function GasSim(width, height, viscosity, density = 1) {
         }
     };
 
-    this.rho = function (x, y) {
+    this.rho = function(x, y) {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1) return 0;
         return rho[x + y * width];
     };
 
-    this.u = function (x, y) {
+    this.u = function(x, y) {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1) return 0;
         return [ux[x + y * width], uy[x + y * width]];
     };
 
-    this.curl = function (x, y) {
+    this.ke = function(x, y) {
+        if (x < 0 || x > width - 1 || y < 0 || y > height - 1) return 0;
+        return rho[x + y * width] * (Math.pow(ux[x + y * width], 2) + Math.pow(uy[x + y * width], 2));
+    };
+
+    this.curl = function(x, y) {
         if (x < 1 || x > width - 2 || y < 1 || y > height - 2) return 0;
         return uy[x + 1 + y * width] - uy[x - 1 + y * width] - ux[x + (y + 1) * width] + ux[x + (y - 1) * width];
     };
 
-    this.obst = function (x, y) {
+    this.obst = function(x, y) {
         if (x < 0 || x > width - 1 || y < 0 || y > height - 1) return 0;
         return obst[x + y * width];
     };
 
-    this.setObst = function (x, y, value) {
+    this.setObst = function(x, y, value) {
         if (x < 1 || x > width - 2 || y < 1 || y > height - 2) return;
         return obst[x + y * width] = value;
     };
 
-    this.viscosity = function () {
-        return viscosity;
-    };
-
-    this.setViscosity = function (value) {
-        viscosity = value;
-    };
-
+    this.viscosity = function() { return viscosity; };
+    this.setViscosity = function(value) { viscosity = value; };
 }
