@@ -1,15 +1,20 @@
 
+// Color maps.
+
 function greenBlueCM(v, bright = 0.9) {
-    return rgb2hex([0, v * (1 + bright) + bright, -v * (1 + bright) + bright]);
+    let g = clamp(v * (1 + bright) + bright, 0, 1)
+    let b = clamp(-v * (1 + bright) + bright, 0, 1)
+    return PIXI.utils.rgb2hex([0, g, b]);
 }
 
-function rainbowCM(v) {
+function rainbowCM(v, bright = 0.3) {
     v = clamp(v, 0, 1);
-    return hsl2hex(0.66 * (1 - v), 1, 0.5);
+    let lightness = clamp(bright + 0.2 * v, 0, 1)
+    return hsl2hex(0.66 * (1 - v), 1, lightness);
 }
 
-COLOR_MAP = rainbowCM
-BC_COLOR = PIXI.utils.rgb2hex([1, 1, 1]);
+bcColor = PIXI.utils.rgb2hex([1, 1, 1]);
+
 
 function setup() {
 
@@ -31,6 +36,7 @@ function setup() {
 
     this.interactMode = document.querySelector('input[name="interactmode-radio"]:checked').value;
     this.rendermode = document.querySelector('input[name="rendermode-radio"]:checked').value;
+    this.colormode = document.querySelector('input[name="colormode-radio"]:checked').value;
     this.drawing = false; // Interactive mode.
     this.mPos = new PIXI.Point(0, 0);
     this.mPosPrev = new PIXI.Point(0, 0);
@@ -61,6 +67,12 @@ function setup() {
     resize();
     window.addEventListener('resize', resize);
     window.addEventListener('fullscreen', resize);
+
+    document.getElementsByName("colormode-radio").forEach((element) => {
+        element.onclick = element.ontouchstart = () => {
+            this.colormode = element.value;
+        }
+    });
 
     document.getElementsByName("interactmode-radio").forEach((element) => {
         element.onclick = element.ontouchstart = () => {
@@ -193,16 +205,27 @@ function drawSimulation() {
             break;
     }
 
+    let colormap;
+    switch (this.colormode) {
+        default:
+        case "standard":
+            colormap = rainbowCM;
+            break;
+        case "greenblue":
+            colormap = greenBlueCM;
+            break;
+    }
+
     for (let x = 0; x < this.sim.width; x++) {
         for (let y = 0; y < this.sim.height; y++) {
             this.gfx.lineStyle(0);
             if (this.sim.bc(x, y)) {
-                this.gfx.beginFill(BC_COLOR);
+                this.gfx.beginFill(bcColor);
                 this.gfx.drawRect(x, y, 1, 1);
                 this.gfx.endFill();
             } else {
                 let v = getValue(x, y);
-                let c = COLOR_MAP(v);
+                let c = colormap(v);
                 this.gfx.beginFill(c);
                 this.gfx.drawRect(x, y, 1, 1);
                 this.gfx.endFill();

@@ -32,7 +32,7 @@ function clamp(value, low, high) {
     return value;
 }
 
-// Colormaps.
+// Colorimetry.
 
 function hsl2hex(h, s, l) {
     var r, g, b;
@@ -53,8 +53,4 @@ function hsl2hex(h, s, l) {
         b = hue2rgb(p, q, h - 1/3);
     }
     return PIXI.utils.rgb2hex([r, g, b]);
-}
-
-function rgb2hex(rgb) {
-    return PIXI.utils.rgb2hex([clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1)]);
 }
