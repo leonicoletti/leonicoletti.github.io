@@ -1,5 +1,18 @@
 
+function greenBlueCM(v, bright = 0.9) {
+    return rgb2hex([0, v * (1 + bright) + bright, -v * (1 + bright) + bright]);
+}
+
+function rainbowCM(v) {
+    v = clamp(v, 0, 1);
+    return hsl2hex(0.66 * (1 - v), 1, 0.5);
+}
+
+COLOR_MAP = rainbowCM
+BC_COLOR = PIXI.utils.rgb2hex([1, 1, 1]);
+
 function setup() {
+
     let sizeRange = document.getElementById("size-range");
     let sizeLabel = document.getElementById("size-label");
     let viscRange = document.getElementById("visc-range");
@@ -169,8 +182,8 @@ function drawSimulation() {
         case "curl":
             getValue = (x, y) => {return this.sim.curl(x, y) * this.colorScale};
             break;
-        case "ke":
-            getValue = (x, y) => {return this.sim.ke(x, y) * this.colorScale};
+        case "pressure":
+            getValue = (x, y) => {return this.sim.q(x, y) * this.colorScale * this.colorScale};
             break;
         case "speed":
             getValue = (x, y) => {
@@ -184,14 +197,13 @@ function drawSimulation() {
         for (let y = 0; y < this.sim.height; y++) {
             this.gfx.lineStyle(0);
             if (this.sim.bc(x, y)) {
-                this.gfx.beginFill(0xeeeeee);
+                this.gfx.beginFill(BC_COLOR);
                 this.gfx.drawRect(x, y, 1, 1);
                 this.gfx.endFill();
             } else {
-                let value = getValue(x, y);
-                let bright = 0.9;
-                let color = rgb2hex([0, value * (1 + bright) + bright, -value * (1 + bright) + bright]);
-                this.gfx.beginFill(color);
+                let v = getValue(x, y);
+                let c = COLOR_MAP(v);
+                this.gfx.beginFill(c);
                 this.gfx.drawRect(x, y, 1, 1);
                 this.gfx.endFill();
             }

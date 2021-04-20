@@ -1,41 +1,4 @@
 
-// Math utils.
-
-function dot(a, b) {
-    return a[0] * b[0] + a[1] * b[1];
-}
-
-function sum(arr) {
-    let sum = 0;
-    for (let i = 0; i < arr.length; i++)
-        sum += arr[i];
-    return sum;
-}
-
-function avg(arr) {
-    return sum(arr) / arr.length;
-}
-
-function scale(vec, scale) {
-    return [vec[0] * scale, vec[1] * scale];
-}
-
-function norm(vec) {
-    let len = Math.sqrt(dot(vec, vec));
-    if (len === 0) return vec;
-    return [vec[0] / len, vec[1] / len];
-}
-
-function clamp(value, low, high) {
-    if (value < low) return low;
-    if (value > high) return high;
-    return value;
-}
-
-function rgb2hex(rgb) {
-    return PIXI.utils.rgb2hex([clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1)]);
-}
-
 // LBM D2Q9 scheme.
 let lv = [[0, 0], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
 
@@ -265,25 +228,28 @@ function GasSimulator(width, height, viscosity, density=1) {
         return (x < b - 1 || x > width - b || y < b - 1 || y > height - b)
     };
 
-    this.rho = function(x, y) {
+    this.rho = function(x, y) { // Density field.
         if (outside(x, y)) return 0;
         return rho[x + y * width];
     };
 
-    this.u = function(x, y) {
+    this.u = function(x, y) { // Velocity vector field.
         if (outside(x, y)) return 0;
         return [ux[x + y * width], uy[x + y * width]];
     };
 
-    this.ke = function(x, y) {
+    this.q = function(x, y) { // Dynamic pressure.
         if (outside(x, y)) return 0;
-        return rho[x + y * width] * (Math.pow(ux[x + y * width], 2) + Math.pow(uy[x + y * width], 2));
+        return 0.5 * rho[x + y * width] * (
+            ux[x + y * width] * ux[x + y * width] + uy[x + y * width] * uy[x + y * width]);
     };
 
-    this.curl = function(x, y) {
+    this.curl = function(x, y) { // Vorticity field.
         if (outside(x, y, 2)) return 0;
         return uy[x + 1 + y * width] - uy[x - 1 + y * width] - ux[x + (y + 1) * width] + ux[x + (y - 1) * width];
     };
+
+    // Boundary mask.
 
     this.bc = function(x, y) {
         if (outside(x, y)) return 0;
