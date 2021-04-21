@@ -1,21 +1,4 @@
 
-// Color maps.
-
-function greenBlueCM(v, bright = 0.9) {
-    let g = clamp(v * (1 + bright) + bright, 0, 1)
-    let b = clamp(-v * (1 + bright) + bright, 0, 1)
-    return PIXI.utils.rgb2hex([0, g, b]);
-}
-
-function rainbowCM(v, bright = 0.3) {
-    v = clamp(v, 0, 1);
-    let lightness = clamp(bright + 0.2 * v, 0, 1)
-    return hsl2hex(0.66 * (1 - v), 1, lightness);
-}
-
-bcColor = PIXI.utils.rgb2hex([1, 1, 1]);
-
-
 function setup() {
 
     let sizeRange = document.getElementById("size-range");
@@ -214,13 +197,16 @@ function drawSimulation() {
         case "greenblue":
             colormap = greenBlueCM;
             break;
+        case "white":
+            colormap = whiteCM;
+            break;
     }
 
     for (let x = 0; x < this.sim.width; x++) {
         for (let y = 0; y < this.sim.height; y++) {
             this.gfx.lineStyle(0);
             if (this.sim.bc(x, y)) {
-                this.gfx.beginFill(bcColor);
+                this.gfx.beginFill(colormap(0, true));
                 this.gfx.drawRect(x, y, 1, 1);
                 this.gfx.endFill();
             } else {

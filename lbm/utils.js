@@ -54,3 +54,27 @@ function hsl2hex(h, s, l) {
     }
     return PIXI.utils.rgb2hex([r, g, b]);
 }
+
+// Color maps.
+
+function greenBlueCM(v, bc = false) {
+    if (bc) return PIXI.utils.rgb2hex([1, 1, 1]);
+    let bright = 0.9;
+    let g = clamp(v * (1 + bright) + bright, 0, 1);
+    let b = clamp(-v * (1 + bright) + bright, 0, 1);
+    return PIXI.utils.rgb2hex([0, g, b]);
+}
+
+function whiteCM(v, bc = false) {
+    if (bc) return PIXI.utils.rgb2hex([0, 0, 0]);
+    let c = clamp(2 * v, 0, 1);
+    return PIXI.utils.rgb2hex([1 - c, 1 - c, 1]);
+}
+
+function rainbowCM(v, bc = false) {
+    if (bc) return PIXI.utils.rgb2hex([1, 1, 1]);
+    v = clamp(v, 0, 1);
+    let bright = 0.3;
+    let lightness = clamp(bright + 0.2 * v, 0, 1);
+    return hsl2hex(0.66 * (1 - v), 1, lightness);
+}
