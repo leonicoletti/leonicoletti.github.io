@@ -13,7 +13,7 @@
 \usepackage[utf8]{inputenc}  %Windows
 
 %\usepackage[scale=0.975]{geometry}
-\usepackage[top=0.5cm, bottom=0.5cm, left=0.7cm, right=1cm]{geometry}
+\usepackage[top=1cm, bottom=1cm, left=1cm, right=1cm]{geometry}
 \usepackage{graphicx}
 
 \firstname{\textsc{Léo}}
@@ -25,8 +25,8 @@
 \homepage{leonicoletti.github.io}
 
 \extrainfo{}
-%\photo[50pt]{nicoletl.png}
-\quote{I am a research engineer in Grenoble, working on Machine learning and Applied mathematics problems. I have a strong interest in all AI-related fields and the emerging quantum information science. I graduated from the Grenoble Institute of Technology - Ensimag in 2016.}
+\photo[75pt][0pt]{nicoletl.png}
+\quote{I am a data scientist and research engineer based in France (near Lyon). I have a strong interest in all AI-related fields. I graduated from the Grenoble Institute of Technology (Ensimag) in 2016 and have been working as a research engineer, a full stack developer and a data scientist since.}
 \makeatletter
 \renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
 \makeatother
@@ -43,48 +43,43 @@
 %-----------------------------------------------------------
 \section{\textsc{Work Experience}}
 
-\cventry{Sep '16 - Today}{Machine Learning expert}{Situ8ed}{Grenoble}{}{Automatically extract signal processing features to provide context-aware, high-level semantic informations. Decision making algorithms in the challenging environment of embedded systems. Auto-tuning of hyperparameters using Gaussian processes on top of the decision layer.}
+\cventry{Since 2020}{Senior Data Scientist}{Atos Big Data \& Security (ex-Bull)}{Grenoble}{}{Machine learning physical dynamics for accelerating numerical simulations. Coupling neural networks inference engines with numerical solvers on HPC clusters. State-of-the-art \emph{ML for science} deep neural networks.}
 
-\cventry{Feb-Sep '16}{Master thesis}{SAP SE}{Walldorf}{}{Learning to rank strategies of investment. Training algorithms with financial data on (non-vectorial) permutation sets to optimise investment strategies made of bonds \& equities. Portfolio optition and selection. SAP HANA Vora team.}
+\cventry{2016 - 2020}{Data Scientist}{Situ8ed}{Grenoble}{}{Extracting DSP features to provide context-aware, high-level semantic informations in embedded devices. Online decision making algorithms. Building and maintaining a high-disponibility microservice architecture to process user data for the AdTech (GDPR-compliance) with back and front-ends. Data visualization dashboards.}
 
-\cventry{Feb-Jun '15}{Research Assistant}{INRIA}{Grenoble}{}{Graphical Bayesian models for high-dimension regression using Gaussian mixtures. Applied to the retrieval of physical properties from hyperspectral images (a Data Science challenge from Kaggle). Modelling spatial dependencies with Markov Random Fields. INRIA MISTIS team (hGLLiM software).}
+\cventry{2016}{Master thesis}{SAP SE}{Germany}{}{Learning to rank strategies of investment. Machine learning to optimize portfolios on the distributed/in-memory SQL engine SAP HANA Vora.}
 
 %-----------------------------------------------------------
 %	EDUCATION
 %-----------------------------------------------------------
 \section{\textsc{Education}}
 
-\cventry{2015-2016}{Research Master}{University Joseph Fourier \& ENSIMAG}{Grenoble}{}{Research-oriented Master 2. Applied statistics, Machine Learning and Data Science, Convex optimization, Stochastic calculus for finance. Grenoble INP, IM\textsuperscript{2}AG - MSIAM program (Master of Science in Industrial and Applied Mathematics).}
+\cventry{2015-2016}{Research Master}{ENSIMAG}{Grenoble}{}{Research-oriented Master 2. Applied statistics, Machine Learning and Data Science, Convex optimization, Stochastic calculus for finance. Grenoble INP, IM\textsuperscript{2}AG - MSIAM program (Master of Science in Industrial and Applied Mathematics).}
 
-\cventry{2013-2015}{Engineering school}{Grenoble Institute of Technology - ENSIMAG}{Grenoble}{}{Two years with a strong emphasis on software development (C/C++, Java, functional languages, MapReduce / Big Data...) and applied mathematics / statistics and their usual tools (Python, Matlab, R). Advanced algorithmics (complexity theory, AI projects).}
+\cventry{2013-2015}{Engineering school}{Grenoble Institute of Technology - ENSIMAG}{Grenoble}{}{Two years with a strong emphasis on software development (C/C++, Java, functional languages, MapReduce / Big Data...), Applied mathematics, Statistics, and Deep Learning.}
 
-\cventry{2011-2013}{Preparatory class}{Lycée Pierre de Fermat}{Toulouse}{}{Two-year intensive program preparing for the national competitive exam for engineering schools (Grandes Écoles). Major in mathematics, minor in physics and engineering. Algebra, analysis, geometry, topology, optics, electromagnetism, mechanics, chemistry... MPSI/MP}
+\cventry{2011-2013}{Preparatory class}{Lycée Pierre de Fermat}{Toulouse}{}{Two-year intensive program preparing for the national competitive exam for engineering schools (\emph{Grandes Écoles}). Major in mathematics, minor in physics and engineering. Algebra, analysis, geometry, topology, optics, electromagnetism, mechanics, chemistry... MPSI/MP}
 
 %-----------------------------------------------------------
 %	SKILLS
 %-----------------------------------------------------------
-\section{\textsc{SKILLS}}
+\section{\textsc{Skills for Data Science}}
 
-\cvline{Machine Learning}{
-Data Science, Deep Learning, Reinforcement Learning, Learning to Rank, Recommender systems, Energy-based models, Gradient Boosted Trees, auto-ML (Gaussian processes, hyperparameters tuning)}
+\cvline{Data Science}{Deep Learning, Statistics, Reinforcement Learning, Learning to Rank, CNNs, U-nets, autoencoders}
 
-\cvline{Optimization}{Metaheuristics, Combinatorial optimization, Numerical methods, Stochastic processes, Monte Carlo method}
+\cvline{Optimization}{Bayesian optimization (Gaussian processes, Stochastic Variational Inference...), Numerical methods, Gradient-based methods, Hyperparams optimization}
 
-\cvline{High-level}{Java/Scala, Python, TensorFlow, numpy/pandas, Matlab, R, MapReduce paradigm}
+\cvline{Programming}{Python 3.x, TensorFlow 2.x, PyTorch, numpy/pandas, Java/Scala, parallel computing, distributed computing}
 
-\cvline{Low-level}{C++11, On-board/low-resources C, multithreading}
+\cvline{Engineering}{Cloud (GCP), MLFlow, HPC clusters, containerization (Docker, Kubernetes)}
 
-\cvline{Front-end}{Angular 2.x, Typescript, HTML/CSS}
-
-\cvline{Back-end}{Node.js, Java servlets, DAOs, MySQL, protobuf/RPC, Cryptography, Network, Computational geometry}
-
-\cvline{Environments}{Unix, git, CI, monitoring, Agile dev, DevOps}
+\cvline{Misc}{Unix OS, DevOps for CI (Jenkins, git, monitoring...), Agile methodology}
 
 %-----------------------------------------------------------
 %	PERSONAL INTERESTS
 %-----------------------------------------------------------
-\section{\textsc{PERSONAL INTERESTS}}
+\section{\textsc{Personal Interests}}
 
-Sport is a sizeable part of my life, I practice mountaineering, rock-climbing, trail/running and martial arts. I also have a specific interest for history, cultures and languages. I speak fluent French and English and can read and understand spoken German, Swedish, Norwegian, Italian, Spanish, and Latin.
+I practice mountaineering, rock-climbing and martial arts. I have a specific interest for history, cultures and languages. I speak fluent French and English. I also have a special interest for linguistics, especially the Germanic and Romance language families. As a side project, I worked on a comparative linguistics web app.
 
 \end{document}
